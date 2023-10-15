@@ -3,7 +3,7 @@ import * as bookService from './services/book';
 
 export { openPickBookDialog, getBooks, openBookDetails };
 
-async function openPickBookDialog() {
+async function openPickBookDialog({ mainWindow }) {
   try {
     const result = await dialog.showOpenDialog({
       properties: ['openFile'],
@@ -12,6 +12,9 @@ async function openPickBookDialog() {
 
     if (!result.canceled) {
       await bookService.addBook({ bookPath: result.filePaths[0] });
+
+      const books = await getBooks();
+      mainWindow.webContents.send('book:getBooks', books);
     }
   } catch (error) {
     console.error(error);

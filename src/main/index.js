@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain, protocol } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { openPickBookDialog, openBookDetails } from './book';
+import { openPickBookDialog, openBookDetails, getBooks } from './book';
 
 function createWindow() {
   // Create the browser window.
@@ -25,7 +25,7 @@ function createWindow() {
     mainWindow.close();
   });
 
-  ipcMain.on('book:openPickBookDialog', openPickBookDialog);
+  ipcMain.on('book:openPickBookDialog', async () => await openPickBookDialog({ mainWindow }));
 
   mainWindow.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
@@ -71,6 +71,8 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('book:openBookDetails', (_, bookId) => openBookDetails({ mainWindow, bookId }));
+
+  ipcMain.handle('book:initBooks', getBooks);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

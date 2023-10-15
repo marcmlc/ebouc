@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Loader } from './Loader';
 
 export function Books() {
+  const [isLoading, setIsLoading] = useState(false);
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
@@ -8,10 +10,27 @@ export function Books() {
       setBooks(books);
     });
 
+    const fetchBooks = async () => {
+      setIsLoading(true);
+      const books = await window.api.invoke('book:initBooks');
+      setBooks(books);
+      setIsLoading(false);
+    };
+
+    fetchBooks();
+
     return () => {
       window.api.removeListener('book:getBooks');
     };
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-fill-200px gap-4">
