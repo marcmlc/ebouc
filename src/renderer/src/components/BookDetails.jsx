@@ -9,6 +9,7 @@ export function BookDetails({ book, close }) {
     await window.api.invoke('book:updateBook', {
       bookId: book._id,
       title: form.title,
+      collection: form.collection,
       author: form.author,
       year: form.year,
     });
@@ -46,6 +47,20 @@ export function BookDetails({ book, close }) {
             onChange={onChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
             placeholder="Le Chat noir"
+          />
+        </div>
+        <div>
+          <label htmlFor="collection" className="block mb-1 font-medium text-gray-900">
+            Collection
+          </label>
+          <input
+            type="text"
+            id="collection"
+            name="collection"
+            value={form.collection}
+            onChange={onChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+            placeholder="Tintin"
           />
         </div>
         <div>
@@ -98,6 +113,7 @@ export function BookDetails({ book, close }) {
 function isFormDirty({ book, form }) {
   return (
     (form.title !== '' && book.title !== form.title) ||
+    (form.collection !== '' && book.collection !== form.collection) ||
     (form.author !== '' && book.author !== form.author) ||
     (form.year !== '' && book.year !== form.year)
   );
@@ -106,6 +122,7 @@ function isFormDirty({ book, form }) {
 function initForm({ book }) {
   return {
     title: book.title || '',
+    collection: book.collection || '',
     author: book.author || '',
     year: book.year || '',
   };
