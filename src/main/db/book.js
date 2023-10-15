@@ -26,8 +26,8 @@ async function findById({ bookId }) {
   return await BookModel.findOne({ _id: bookId });
 }
 
-async function updateBook({ bookId, title, collection, author, year }) {
-  return await BookModel.updateAsync({ _id: bookId }, { $set: { title, collection, author, year } });
+async function updateBook({ bookId, title, collection, tome, author, year }) {
+  return await BookModel.updateAsync({ _id: bookId }, { $set: { title, collection, tome, author, year } });
 }
 
 async function deleteBook({ bookId }) {
