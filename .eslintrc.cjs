@@ -9,6 +9,7 @@ module.exports = {
   ],
   plugins: ['prettier'],
   rules: {
+    'react/prop-types': 'off',
     'prettier/prettier': 'error',
   },
 };
