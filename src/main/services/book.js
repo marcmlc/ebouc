@@ -6,7 +6,13 @@ import { STORAGE_PATH } from '../constant';
 import * as bookRepository from '../db/book';
 import { pdfToPng } from 'pdf-to-png-converter';
 
-export { addBook, deleteBook, getBook, getBooks, getBooksByCollection, updateBook };
+export { addBook, deleteBook, getBook, getBooks, getBooksByCollection, updateBook, addBooks };
+
+async function addBooks({ booksPath }) {
+  for (const bookPath of booksPath) {
+    await addBook({ bookPath });
+  }
+}
 
 async function addBook({ bookPath }) {
   try {

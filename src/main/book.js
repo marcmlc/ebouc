@@ -15,12 +15,12 @@ export {
 async function openPickBookDialog({ mainWindow }) {
   try {
     const result = await dialog.showOpenDialog({
-      properties: ['openFile'],
+      properties: ['openFile', 'multiSelections'],
       filters: [{ name: 'Livres', extensions: ['epub', 'pdf'] }],
     });
 
     if (!result.canceled) {
-      await bookService.addBook({ bookPath: result.filePaths[0] });
+      await bookService.addBooks({ booksPath: result.filePaths });
 
       await sendBooksByCollection({ mainWindow });
     }
