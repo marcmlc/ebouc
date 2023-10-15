@@ -1,6 +1,6 @@
 import { db } from './db';
 
-export { insertOne, findByBookPath, findAll, findById };
+export { insertOne, findByBookPath, findAll, findById, updateBook };
 
 const BookModel = db.book;
 
@@ -24,4 +24,8 @@ async function findAll() {
 
 async function findById({ bookId }) {
   return await BookModel.findOne({ _id: bookId });
+}
+
+async function updateBook({ bookId, title, author, year }) {
+  return await BookModel.updateAsync({ _id: bookId }, { $set: { title, author, year } });
 }

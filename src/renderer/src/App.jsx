@@ -1,4 +1,4 @@
-import { BookDetails } from './components/BookDetails';
+import { BookDetailsPanel } from './components/BookDetailsPanel';
 import { Books } from './components/Books';
 import { MenuBar } from './components/MenuBar';
 
@@ -8,7 +8,7 @@ function App() {
       <MenuBar />
       <div className="p-2 relative h-[calc(100vh-5rem)]">
         <Books />
-        <BookDetails />
+        <BookDetailsPanel />
       </div>
     </>
   );
