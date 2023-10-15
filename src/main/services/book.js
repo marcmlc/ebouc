@@ -108,7 +108,7 @@ async function getBook({ bookId }) {
 
 async function updateBook(book) {
   try {
-    return await bookRepository.updateBook(nullifyEmptyValues({ book }));
+    return await bookRepository.updateBook(formatBookToUpdate({ book }));
   } catch (error) {
     console.error(error);
   }
@@ -141,8 +141,16 @@ function parseEpubBookToModel({ parsedBook, bookPath, coverPath }) {
   };
 }
 
-function nullifyEmptyValues({ book }) {
-  return chain(book)
+function formatBookToUpdate({ book }) {
+  const compactBook = chain(book)
     .mapValues(value => (isEmpty(value) ? undefined : value))
     .value();
+
+  const updatedBook = {
+    ...compactBook,
+    ...(compactBook.year ? { year: Number(compactBook.year) } : {}),
+    ...(compactBook.tome ? { tome: Number(compactBook.tome) } : {}),
+  };
+
+  return updatedBook;
 }
