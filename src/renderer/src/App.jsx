@@ -1,12 +1,12 @@
-function App() {
-  const addBook = async () => {
-    await window.api.send('book:openPickBookDialog');
-  };
+import { MenuBar } from './MenuBar';
 
+function App() {
   return (
     <div>
-      <h1 className="text-2xl text-orange-500">Bienvenue sur Ebouc!</h1>
-      <button onClick={async () => await addBook()}>Open</button>
+      <MenuBar />
+      <div className="p-2">
+        <h1 className="text-2xl text-orange-500">Bienvenue sur Ebouc!</h1>
+      </div>
     </div>
   );
 }

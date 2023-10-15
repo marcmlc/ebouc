@@ -9,6 +9,7 @@ function createWindow() {
     width: 900,
     height: 670,
     show: false,
+    frame: false,
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -18,6 +19,10 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
+  });
+
+  ipcMain.on('app:close', () => {
+    mainWindow.close();
   });
 
   ipcMain.on('book:openPickBookDialog', openPickBookDialog);
