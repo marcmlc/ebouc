@@ -2,10 +2,11 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 const IPC = {
   send: ['book:openPickBookDialog', 'app:close'],
-  on: ['book:getBooks', 'book:getBook'],
+  on: ['book:getBooks', 'book:getBook', 'book:getBooksByCollection'],
   invoke: [
     'book:openBookDetails',
     'book:initBooks',
+    'book:initBooksByCollection',
     'book:updateBook',
     'book:closeBookDetails',
     'book:openBook',

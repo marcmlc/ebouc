@@ -1,7 +1,16 @@
 import { dialog, shell } from 'electron';
 import * as bookService from './services/book';
 
-export { openPickBookDialog, getBooks, openBookDetails, updateBook, closeBookDetails, openBookOnSystem, deleteBook };
+export {
+  openPickBookDialog,
+  getBooks,
+  openBookDetails,
+  updateBook,
+  closeBookDetails,
+  openBookOnSystem,
+  deleteBook,
+  getBooksByCollection,
+};
 
 async function openPickBookDialog({ mainWindow }) {
   try {
@@ -13,8 +22,7 @@ async function openPickBookDialog({ mainWindow }) {
     if (!result.canceled) {
       await bookService.addBook({ bookPath: result.filePaths[0] });
 
-      const books = await getBooks();
-      mainWindow.webContents.send('book:getBooks', books);
+      await sendBooksByCollection({ mainWindow });
     }
   } catch (error) {
     console.error(error);
@@ -38,17 +46,24 @@ async function getBooks() {
   return bookService.getBooks();
 }
 
+async function getBooksByCollection() {
+  return bookService.getBooksByCollection();
+}
+
+async function sendBooksByCollection({ mainWindow }) {
+  const collections = await bookService.getBooksByCollection();
+  mainWindow.webContents.send('book:getBooksByCollection', collections);
+}
+
 async function updateBook({ mainWindow, book }) {
   await bookService.updateBook(book);
 
-  const books = await getBooks();
-  mainWindow.webContents.send('book:getBooks', books);
+  await sendBooksByCollection({ mainWindow });
 }
 
 async function deleteBook({ mainWindow, bookId }) {
   await bookService.deleteBook({ bookId });
 
-  const books = await getBooks();
-  mainWindow.webContents.send('book:getBooks', books);
+  await sendBooksByCollection({ mainWindow });
   mainWindow.webContents.send('book:getBook', undefined);
 }

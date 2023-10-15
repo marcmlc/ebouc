@@ -3,8 +3,10 @@ import fse from 'fs-extra';
 import path from 'path';
 import { STORAGE_PATH } from '../constant';
 import * as bookRepository from '../db/book';
+import groupBy from 'lodash/groupBy';
+import { chain, get, isEmpty } from 'lodash';
 
-export { addBook, getBooks, getBook, updateBook, deleteBook };
+export { addBook, getBooks, getBook, updateBook, deleteBook, getBooksByCollection };
 
 async function addBook({ bookPath }) {
   try {
@@ -39,13 +41,18 @@ async function getBooks() {
   return bookRepository.findAll();
 }
 
+async function getBooksByCollection() {
+  const books = await bookRepository.findAll();
+  return groupBy(books, book => get(book, 'collection', 'Sans Collection'));
+}
+
 async function getBook({ bookId }) {
   return bookRepository.findById({ bookId });
 }
 
 async function updateBook(book) {
   try {
-    return await bookRepository.updateBook(book);
+    return await bookRepository.updateBook(nullifyEmptyValues({ book }));
   } catch (error) {
     console.error(error);
   }
@@ -77,4 +84,10 @@ function parserBookToModel({ parsedBook, bookPath, coverPath }) {
     bookPath,
     coverPath,
   };
+}
+
+function nullifyEmptyValues({ book }) {
+  return chain(book)
+    .mapValues(value => (isEmpty(value) ? undefined : value))
+    .value();
 }

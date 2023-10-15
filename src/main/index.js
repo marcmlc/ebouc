@@ -4,11 +4,12 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import {
   openPickBookDialog,
   openBookDetails,
-  getBooks,
+  getBooksByCollection,
   updateBook,
   closeBookDetails,
   openBookOnSystem,
   deleteBook,
+  getBooks,
 } from './book';
 
 function createWindow() {
@@ -84,6 +85,7 @@ app.whenReady().then(() => {
   ipcMain.handle('book:openBook', (_, bookPath) => openBookOnSystem({ bookPath }));
 
   ipcMain.handle('book:initBooks', getBooks);
+  ipcMain.handle('book:initBooksByCollection', getBooksByCollection);
 
   ipcMain.handle('book:updateBook', async (_, book) => await updateBook({ mainWindow, book }));
 

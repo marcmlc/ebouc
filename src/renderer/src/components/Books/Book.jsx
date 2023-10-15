@@ -35,7 +35,6 @@ export function Book({ book }) {
         <img src={cover} alt={book.title} className={`h-full w-full ${isEditing ? 'blur-sm' : ''}`} />
       </div>
       <p className="break-words">{book.title}</p>
-      <p className="break-words text-sm italic">{book.collection}</p>
       <p className="text-sm break-words font-bold">{book.author}</p>
     </div>
   );

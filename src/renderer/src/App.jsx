@@ -1,5 +1,5 @@
 import { BookDetailsPanel } from './components/BookDetails/BookDetailsPanel';
-import { Books } from './components/Books/Books';
+import { Collections } from './components/Collections/Collections';
 import { MenuBar } from './components/MenuBar';
 import { BookModeProvider } from './contexts/BookModeProvider';
 
@@ -8,7 +8,7 @@ function App() {
     <BookModeProvider>
       <MenuBar />
       <div className="p-2 relative h-[calc(100vh-5rem)]">
-        <Books />
+        <Collections />
         <BookDetailsPanel />
       </div>
     </BookModeProvider>

@@ -121,10 +121,10 @@ function initForm({ defaultValue }) {
 
 function isFormDirty({ defaultValue, form }) {
   return (
-    (form.title !== '' && defaultValue.title !== form.title) ||
-    (form.collection !== '' && defaultValue.collection !== form.collection) ||
-    (form.tome !== '' && defaultValue.tome !== form.tome) ||
-    (form.author !== '' && defaultValue.author !== form.author) ||
-    (form.year !== '' && defaultValue.year !== form.year)
+    defaultValue.title !== form.title ||
+    defaultValue.collection !== form.collection ||
+    defaultValue.tome !== form.tome ||
+    defaultValue.author !== form.author ||
+    defaultValue.year !== form.year
   );
 }
