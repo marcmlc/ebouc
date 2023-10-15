@@ -1,20 +1,44 @@
-import { contextBridge } from 'electron';
-import { electronAPI } from '@electron-toolkit/preload';
+import { contextBridge, ipcRenderer } from 'electron';
 
-// Custom APIs for renderer
-const api = {};
+const IPC = {
+  send: [],
+  on: [],
+  invoke: [],
+};
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('api', api);
-  } catch (error) {
-    console.error(error);
-  }
-} else {
-  window.electron = electronAPI;
-  window.api = api;
+const api = {
+  send: (channel, ...args) => {
+    if (!IPC.send.includes(channel)) {
+      throw new Error(`${channel} not included in 'send'`);
+    }
+
+    return ipcRenderer.send(channel, ...args);
+  },
+  on: (channel, listener) => {
+    if (!IPC.on.includes(channel)) {
+      throw new Error(`${channel} not included in 'on'`);
+    }
+
+    ipcRenderer.on(channel, (event, ...args) => listener(...args));
+  },
+  removeListener: channel => {
+    if (!IPC.on.includes(channel)) {
+      throw new Error(`${channel} not included in 'on'`);
+    }
+
+    ipcRenderer.removeAllListeners(channel);
+  },
+  invoke: (channel, ...args) => {
+    if (!IPC.invoke.includes(channel)) {
+      throw new Error(`${channel} not included in 'invoke'`);
+    }
+
+    return ipcRenderer.invoke(channel, ...args);
+  },
+};
+
+try {
+  contextBridge.exposeInMainWorld('api', api);
+} catch (error) {
+  console.error(error);
 }
