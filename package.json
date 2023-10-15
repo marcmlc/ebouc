@@ -21,7 +21,8 @@
     "@tabler/icons-react": "^2.38.0",
     "epub2": "^3.0.2",
     "fs-extra": "^11.1.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "pdf-to-png-converter": "^3.1.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.1",

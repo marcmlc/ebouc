@@ -16,7 +16,7 @@ async function openPickBookDialog({ mainWindow }) {
   try {
     const result = await dialog.showOpenDialog({
       properties: ['openFile'],
-      filters: [{ name: 'Livres', extensions: ['epub'] }],
+      filters: [{ name: 'Livres', extensions: ['epub', 'pdf'] }],
     });
 
     if (!result.canceled) {

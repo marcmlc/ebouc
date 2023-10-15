@@ -4,36 +4,76 @@ import { chain, isEmpty, partition, sortBy } from 'lodash';
 import path from 'path';
 import { STORAGE_PATH } from '../constant';
 import * as bookRepository from '../db/book';
+import { pdfToPng } from 'pdf-to-png-converter';
 
 export { addBook, deleteBook, getBook, getBooks, getBooksByCollection, updateBook };
 
 async function addBook({ bookPath }) {
   try {
-    const parsedBook = await EPub.createAsync(bookPath);
-
     const bookAlreadyExists = Boolean(await bookRepository.findByBookPath({ bookPath }));
 
-    if (!bookAlreadyExists) {
-      const { title, cover } = parsedBook.metadata;
-      const coverPath = cover ? getCoverPath({ title }) : undefined;
-      const book = parserBookToModel({ parsedBook, bookPath, coverPath });
-
-      await bookRepository.insertOne(book);
-
-      if (coverPath) {
-        const [coverImageData] = await parsedBook.getImageAsync(cover);
-        await fse.outputFile(coverPath, coverImageData, 'binary');
-      } else {
-        console.log('Cannot find cover image');
-      }
-
-      console.log('Book added');
-    } else {
+    if (bookAlreadyExists) {
       console.log('Book already exists');
+      return;
     }
+
+    const { book, coverImageData } = await parseBook({ bookPath });
+
+    await bookRepository.insertOne(book);
+
+    // save thumbnail
+    if (coverImageData) {
+      await fse.outputFile(book.coverPath, coverImageData, 'binary');
+    } else {
+      console.log('Cannot find cover image');
+    }
+
+    console.log('Book added');
   } catch (error) {
     console.error(error);
   }
+}
+
+async function parseBook({ bookPath }) {
+  if (bookPath.endsWith('.epub')) {
+    return parseEpubBook({ bookPath });
+  }
+  if (bookPath.endsWith('.pdf')) {
+    return parsePdfBook({ bookPath });
+  }
+  throw new Error('Unsupported book.');
+}
+
+async function parseEpubBook({ bookPath }) {
+  const parsedBook = await EPub.createAsync(bookPath);
+  const { title, cover } = parsedBook.metadata;
+
+  if (!cover) {
+    return { book: parseEpubBookToModel({ parsedBook, bookPath }) };
+  }
+
+  const coverPath = getCoverPath({ title });
+  const [coverImageData] = await parsedBook.getImageAsync(cover);
+
+  return { book: parseEpubBookToModel({ parsedBook, bookPath, coverPath }), coverImageData };
+}
+
+async function parsePdfBook({ bookPath }) {
+  // First page as thumbnail
+  const [coverImage] = await pdfToPng(bookPath, {
+    pagesToProcess: [1],
+  });
+  const coverImageData = coverImage.content;
+  const title = bookPath.split('/').at(-1).split('.').at(0);
+  const coverPath = getCoverPath({ title });
+
+  const book = {
+    title,
+    bookPath,
+    coverPath,
+  };
+
+  return { book, coverImageData };
 }
 
 async function getBooks() {
@@ -82,13 +122,12 @@ function getCoverPath({ title }) {
   return path.join(STORAGE_PATH, 'books', coverFileName);
 }
 
-function parserBookToModel({ parsedBook, bookPath, coverPath }) {
-  const { title, cover, creator: author, date } = parsedBook.metadata;
+function parseEpubBookToModel({ parsedBook, bookPath, coverPath }) {
+  const { title, creator: author, date } = parsedBook.metadata;
   const year = date ? new Date(date).getFullYear() : undefined;
 
   return {
     title,
-    cover,
     author,
     year,
     bookPath,
