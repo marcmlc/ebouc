@@ -1,6 +1,7 @@
-import { app, shell, BrowserWindow } from 'electron';
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import { openPickBookDialog } from './book';
 
 function createWindow() {
   // Create the browser window.
@@ -18,6 +19,8 @@ function createWindow() {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
   });
+
+  ipcMain.on('book:openPickBookDialog', openPickBookDialog);
 
   mainWindow.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
