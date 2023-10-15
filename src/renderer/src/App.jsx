@@ -1,5 +1,5 @@
-import { BookDetailsPanel } from './components/BookDetailsPanel';
-import { Books } from './components/Books';
+import { BookDetailsPanel } from './components/BookDetails/BookDetailsPanel';
+import { Books } from './components/Books/Books';
 import { MenuBar } from './components/MenuBar';
 
 function App() {

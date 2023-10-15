@@ -1,48 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Loader } from './Loader';
 import { IconExternalLink } from '@tabler/icons-react';
 
-export function Books() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [books, setBooks] = useState([]);
-
-  useEffect(() => {
-    window.api.on('book:getBooks', books => {
-      setBooks(books);
-    });
-
-    const fetchBooks = async () => {
-      setIsLoading(true);
-      const books = await window.api.invoke('book:initBooks');
-      setBooks(books);
-      setIsLoading(false);
-    };
-
-    fetchBooks();
-
-    return () => {
-      window.api.removeListener('book:getBooks');
-    };
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Loader />
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-fill-200px gap-4">
-      {books.map(book => (
-        <Book key={book._id} book={book} />
-      ))}
-    </div>
-  );
-}
-
-function Book({ book }) {
+export function Book({ book }) {
   const cover = `media:///${book.coverPath}`;
 
   const onClick = async book => {
