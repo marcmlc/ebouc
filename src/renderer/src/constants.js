@@ -1,4 +1,4 @@
-export const BookMode = {
-  READ: 'READ',
-  EDIT: 'EDIT',
+export const VIEW_MODES = {
+  CARDS: 'CARDS',
+  LIST: 'LIST',
 };
