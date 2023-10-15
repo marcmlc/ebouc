@@ -143,7 +143,7 @@ function parseEpubBookToModel({ parsedBook, bookPath, coverPath }) {
 
 function formatBookToUpdate({ book }) {
   const compactBook = chain(book)
-    .mapValues(value => (isEmpty(value) ? undefined : value))
+    .mapValues(value => (!value ? undefined : value))
     .value();
 
   const updatedBook = {
