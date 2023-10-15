@@ -33,6 +33,14 @@ export function Books() {
     );
   }
 
+  if (books.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-lg">Encore aucun livre... 📚</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-fill-200px gap-4">
       {books.map(book => (
