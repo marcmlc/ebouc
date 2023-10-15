@@ -38,12 +38,25 @@ export function BookDetails() {
   return (
     <Panel>
       <div className="flex flex-col h-full gap-4 items-center">
-        <h1 className="text-xl text-center">{book.title}</h1>
         <div className="flex flex-col">
-          <img src={cover} alt={book.title} className="w-[300px]" />
+          <img src={cover} className="w-[300px]" />
         </div>
         <div className="h-[1px] mt-2 mb-5 bg-gray-200 w-full" />
         <form className="flex flex-col w-full gap-3" onSubmit={onSubmit}>
+          <div>
+            <label htmlFor="title" className="block mb-1 font-medium text-gray-900">
+              Titre
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={book.title}
+              onChange={onChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+              placeholder="Le Chat noir"
+            />
+          </div>
           <div>
             <label htmlFor="author" className="block mb-1 font-medium text-gray-900">
               Auteur
@@ -69,7 +82,7 @@ export function BookDetails() {
               value={book.year}
               onChange={onChange}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-              placeholder="2012"
+              placeholder="1843"
             />
           </div>
           <div className="flex justify-between mt-5">
