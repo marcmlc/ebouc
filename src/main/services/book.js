@@ -52,7 +52,7 @@ async function getBooksByCollection() {
 
   return {
     ...booksByCollections,
-    'Sans Collection': [...booksWithoutCollection],
+    ...(!isEmpty(booksWithoutCollection) ? { 'Sans Collection': [...booksWithoutCollection] } : {}),
   };
 }
 
