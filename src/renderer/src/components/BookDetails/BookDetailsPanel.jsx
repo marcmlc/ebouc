@@ -23,8 +23,8 @@ export function BookDetailsPanel() {
   };
 
   return (
-    <div className="absolute right-0 inset-y-0 w-1/3 z-10 border-l-[0.5px] px-4 bg-white overflow-y-scroll">
-      <div className="py-4">
+    <div className="absolute right-0 w-1/3 z-10 border-l-[0.5px] bg-white top-20 bottom-0 overflow-y-auto">
+      <div className="py-8 px-4">
         <BookDetails key={book._id} book={book} close={close} />
       </div>
     </div>

@@ -6,9 +6,11 @@ import { BookModeProvider } from './contexts/BookModeProvider';
 function App() {
   return (
     <BookModeProvider>
-      <MenuBar />
-      <div className="p-2 relative h-[calc(100vh-5rem)]">
-        <Collections />
+      <div className="relative h-full">
+        <MenuBar />
+        <div className="flex flex-col relative h-[calc(100vh-5rem)] overflow-y-auto w-[90%] mx-auto py-8">
+          <Collections className="flex-auto" />
+        </div>
         <BookDetailsPanel />
       </div>
     </BookModeProvider>

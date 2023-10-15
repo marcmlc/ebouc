@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Collection } from './Collection';
 
-export function Collections() {
+export function Collections({ className = '' }) {
   const [isLoading, setIsLoading] = useState(false);
   const [collections, setCollections] = useState(undefined);
 
@@ -43,7 +43,7 @@ export function Collections() {
   }
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className={`flex flex-col gap-12 ${className}`}>
       {chain(collections)
         .map((books, collection) => {
           return <Collection key={collection} collection={collection} books={books} />;
