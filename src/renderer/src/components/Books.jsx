@@ -23,11 +23,19 @@ export function Books() {
 }
 
 function Book({ book }) {
+  const cover = `media:///${book.coverPath}`;
+
+  const onClick = async book => {
+    await window.api.invoke('book:openBookDetails', book._id);
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: 200, cursor: 'pointer' }}>
-      <img src={`media:///${book.coverPath}`} alt={book.title} />
-      <p style={{ fontSize: '1em', wordWrap: 'break-word' }}>{book.title}</p>
-      <p style={{ fontSize: '0.8em', wordWrap: 'break-word', fontWeight: 700 }}>{book.author}</p>
+    <div className="flex flex-col w-[200px] h-[265px] cursor-pointer relative group" onClick={() => onClick(book)}>
+      <div className="w-full h-full absolute hidden group-hover:flex hover:flex-col hover:p-4 hover:justify-center hover:gap-3 hover:bg-black hover:opacity-80 ">
+        <p className="break-words text-white">{book.title}</p>
+        <p className="text-sm break-words text-white font-bold">{book.author}</p>
+      </div>
+      <img src={cover} alt={book.title} className="h-full w-full" />
     </div>
   );
 }

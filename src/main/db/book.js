@@ -1,6 +1,6 @@
 import { db } from './db';
 
-export { insertOne, findByBookPath, findAll };
+export { insertOne, findByBookPath, findAll, findById };
 
 const BookModel = db.book;
 
@@ -20,4 +20,8 @@ async function findByBookPath({ bookPath }) {
 
 async function findAll() {
   return await BookModel.findAsync();
+}
+
+async function findById({ bookId }) {
+  return await BookModel.findOne({ _id: bookId });
 }

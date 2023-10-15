@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain, protocol } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { openPickBookDialog } from './book';
+import { openPickBookDialog, openBookDetails } from './book';
 
 function createWindow() {
   // Create the browser window.
@@ -39,6 +39,8 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
+
+  return mainWindow;
 }
 
 // This method will be called when Electron has finished
@@ -55,7 +57,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  createWindow();
+  const mainWindow = createWindow();
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -67,6 +69,8 @@ app.whenReady().then(() => {
     const pathname = decodeURIComponent(request.url.replace('media:///', ''));
     callback(pathname);
   });
+
+  ipcMain.handle('book:openBookDetails', (_, bookId) => openBookDetails({ mainWindow, bookId }));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
