@@ -1,12 +1,11 @@
 import { EPub } from 'epub2';
 import fse from 'fs-extra';
+import { chain, isEmpty, partition, sortBy } from 'lodash';
 import path from 'path';
 import { STORAGE_PATH } from '../constant';
 import * as bookRepository from '../db/book';
-import groupBy from 'lodash/groupBy';
-import { chain, get, isEmpty } from 'lodash';
 
-export { addBook, getBooks, getBook, updateBook, deleteBook, getBooksByCollection };
+export { addBook, deleteBook, getBook, getBooks, getBooksByCollection, updateBook };
 
 async function addBook({ bookPath }) {
   try {
@@ -43,7 +42,18 @@ async function getBooks() {
 
 async function getBooksByCollection() {
   const books = await bookRepository.findAll();
-  return groupBy(books, book => get(book, 'collection', 'Sans Collection'));
+  const [booksWithCollection, booksWithoutCollection] = partition(books, book => !isEmpty(book.collection));
+
+  // group books by collection and sort by tome
+  const booksByCollections = chain(booksWithCollection)
+    .groupBy('collection')
+    .mapValues(books => sortBy(books, 'tome'))
+    .value();
+
+  return {
+    ...booksByCollections,
+    'Sans Collection': [...booksWithoutCollection],
+  };
 }
 
 async function getBook({ bookId }) {
