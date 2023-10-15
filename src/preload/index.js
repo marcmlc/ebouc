@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 const IPC = {
   send: ['book:openPickBookDialog', 'app:close'],
-  on: [],
+  on: ['book:getBooks'],
   invoke: [],
 };
 

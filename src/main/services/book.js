@@ -4,7 +4,7 @@ import path from 'path';
 import { STORAGE_PATH } from '../constant';
 import * as bookRepository from '../db/book';
 
-export { addBook };
+export { addBook, getBooks };
 
 async function addBook({ bookPath }) {
   try {
@@ -33,6 +33,10 @@ async function addBook({ bookPath }) {
   } catch (error) {
     console.error(error);
   }
+}
+
+async function getBooks() {
+  return bookRepository.findAll();
 }
 
 function getCoverPath({ title }) {

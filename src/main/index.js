@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import { app, shell, BrowserWindow, ipcMain, protocol } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { openPickBookDialog } from './book';
@@ -61,6 +61,11 @@ app.whenReady().then(() => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+
+  protocol.registerFileProtocol('media', (request, callback) => {
+    const pathname = decodeURIComponent(request.url.replace('media:///', ''));
+    callback(pathname);
   });
 });
 

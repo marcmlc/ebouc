@@ -1,7 +1,7 @@
 import { dialog } from 'electron';
 import * as bookService from './services/book';
 
-export { openPickBookDialog };
+export { openPickBookDialog, getBooks };
 
 async function openPickBookDialog() {
   try {
@@ -16,4 +16,8 @@ async function openPickBookDialog() {
   } catch (error) {
     console.error(error);
   }
+}
+
+async function getBooks() {
+  return bookService.getBooks();
 }
