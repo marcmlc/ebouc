@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Loader } from './Loader';
+import { IconExternalLink } from '@tabler/icons-react';
 
 export function Books() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,12 +50,17 @@ function Book({ book }) {
   };
 
   return (
-    <div className="flex flex-col w-[200px] h-[265px] cursor-pointer relative group" onClick={() => onClick(book)}>
-      <div className="w-full h-full absolute hidden group-hover:flex hover:flex-col hover:p-4 hover:justify-center hover:gap-3 hover:bg-black hover:opacity-80 ">
-        <p className="break-words text-white">{book.title}</p>
-        <p className="text-sm break-words text-white font-bold">{book.author}</p>
+    <div className="flex flex-col cursor-pointer gap-1" onClick={() => onClick(book)}>
+      <div className="w-[200px] h-[265px] relative group">
+        <div className="w-full h-full absolute hidden group-hover:block">
+          <div className="w-full h-full flex items-center justify-center gap-1 bg-black bg-black opacity-80 text-white">
+            Ouvrir <IconExternalLink />
+          </div>
+        </div>
+        <img src={cover} alt={book.title} className="h-full w-full" />
       </div>
-      <img src={cover} alt={book.title} className="h-full w-full" />
+      <p className="break-words">{book.title}</p>
+      <p className="text-sm break-words font-bold">{book.author}</p>
     </div>
   );
 }
