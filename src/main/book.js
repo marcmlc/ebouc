@@ -1,7 +1,7 @@
 import { dialog, shell } from 'electron';
 import * as bookService from './services/book';
 
-export { openPickBookDialog, getBooks, openBookDetails, updateBook, closeBookDetails, openBookOnSystem };
+export { openPickBookDialog, getBooks, openBookDetails, updateBook, closeBookDetails, openBookOnSystem, deleteBook };
 
 async function openPickBookDialog({ mainWindow }) {
   try {
@@ -43,4 +43,12 @@ async function updateBook({ mainWindow, book }) {
 
   const books = await getBooks();
   mainWindow.webContents.send('book:getBooks', books);
+}
+
+async function deleteBook({ mainWindow, bookId }) {
+  await bookService.deleteBook({ bookId });
+
+  const books = await getBooks();
+  mainWindow.webContents.send('book:getBooks', books);
+  mainWindow.webContents.send('book:getBook', undefined);
 }

@@ -4,7 +4,7 @@ import path from 'path';
 import { STORAGE_PATH } from '../constant';
 import * as bookRepository from '../db/book';
 
-export { addBook, getBooks, getBook, updateBook };
+export { addBook, getBooks, getBook, updateBook, deleteBook };
 
 async function addBook({ bookPath }) {
   try {
@@ -49,6 +49,10 @@ async function updateBook(book) {
   } catch (error) {
     console.error(error);
   }
+}
+
+async function deleteBook({ bookId }) {
+  return await bookRepository.deleteBook({ bookId });
 }
 
 function getCoverPath({ title }) {

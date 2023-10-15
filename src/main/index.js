@@ -1,7 +1,15 @@
 import { app, shell, BrowserWindow, ipcMain, protocol } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { openPickBookDialog, openBookDetails, getBooks, updateBook, closeBookDetails, openBookOnSystem } from './book';
+import {
+  openPickBookDialog,
+  openBookDetails,
+  getBooks,
+  updateBook,
+  closeBookDetails,
+  openBookOnSystem,
+  deleteBook,
+} from './book';
 
 function createWindow() {
   // Create the browser window.
@@ -78,6 +86,8 @@ app.whenReady().then(() => {
   ipcMain.handle('book:initBooks', getBooks);
 
   ipcMain.handle('book:updateBook', async (_, book) => await updateBook({ mainWindow, book }));
+
+  ipcMain.handle('book:deleteBook', async (_, bookId) => await deleteBook({ mainWindow, bookId }));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
