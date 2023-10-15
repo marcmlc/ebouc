@@ -9,15 +9,21 @@ export function Book({ book }) {
     await window.api.invoke('book:openBookDetails', book._id);
   }, [book]);
 
+  const openBookOnSystem = useCallback(async () => {
+    await window.api.invoke('book:openBook', book.bookPath);
+  }, [book]);
+
   const cover = `media:///${book.coverPath}`;
 
   return (
-    <div className="flex flex-col cursor-pointer gap-1">
+    <div className="flex flex-col gap-1">
       <div className="w-[200px] h-[265px] relative group">
         {isEditing && <EditMode onClickEdit={openBookDetails} />}
         {isReading && (
-          <div className="w-full h-full absolute hidden group-hover:block">
-            <div className="w-full h-full flex items-center justify-center gap-1 bg-black bg-black opacity-80 text-white">
+          <div className="w-full h-full absolute hidden group-hover:block cursor-pointer">
+            <div
+              onClick={async () => await openBookOnSystem()}
+              className="w-full h-full flex items-center justify-center gap-1 bg-black bg-black opacity-80 text-white">
               Ouvrir <IconExternalLink />
             </div>
           </div>
