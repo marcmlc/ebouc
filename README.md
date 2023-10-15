@@ -51,7 +51,7 @@ Run the following commands:
 # Mac build
 pnpm build:mac
 
-# Windown build
+# Windows build
 pnpm build:win
 
 # Linux build
