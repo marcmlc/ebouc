@@ -1,7 +1,9 @@
-import { IconPlus } from '@tabler/icons-react';
-import { IconX } from '@tabler/icons-react';
+import { IconEdit, IconPlus, IconX } from '@tabler/icons-react';
+import { useBookMode } from '../contexts/BookModeProvider';
 
 export function MenuBar() {
+  const { isEditing, toggleBookModeEdit } = useBookMode();
+
   const closeApp = async () => {
     await window.api.send('app:close');
   };
@@ -18,6 +20,9 @@ export function MenuBar() {
           <div className="w-[0.5px] opacity-20 h-5 bg-black" />
           <button onClick={async () => await addBook()}>
             <IconPlus />
+          </button>
+          <button onClick={toggleBookModeEdit} className={`${isEditing ? 'text-red-500' : 'text-black'}`}>
+            <IconEdit />
           </button>
         </div>
         <div className="no-drag">
